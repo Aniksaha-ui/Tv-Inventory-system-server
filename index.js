@@ -21,6 +21,10 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
+app.get("/project", (req, res) => {
+  res.send("Hello World");
+});
+
 function verifyJWT(req, res, next) {
   const authHeader = req.headers.authorization;
   if (!authHeader) {
