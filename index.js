@@ -68,6 +68,7 @@ async function run() {
       if (email === decodedEmail) {
         const query = { _id: ObjectId(id) };
         const product = await productCollection.findOne(query);
+        console.log(product);
         res.send(product);
       } else {
         res.status(403).send({ message: "Access Forbidden" });
