@@ -48,7 +48,7 @@ async function run() {
       const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN, {
         expiresIn: "1d",
       });
-      console.log(user);
+      // console.log(user);
       res.send({ accessToken });
     });
 
@@ -65,10 +65,12 @@ async function run() {
       const id = req.params.id;
       const email = req.query.email;
       const decodedEmail = req.decoded.email;
+      console.log("email", email);
+      console.log("decoded email", decodedEmail);
       if (email === decodedEmail) {
         const query = { _id: ObjectId(id) };
         const product = await productCollection.findOne(query);
-        console.log(product);
+        // console.log(product);
         res.send(product);
       } else {
         res.status(403).send({ message: "Access Forbidden" });
