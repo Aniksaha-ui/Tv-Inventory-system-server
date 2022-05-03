@@ -22,7 +22,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/project", (req, res) => {
-  res.send("Hello World");
+  res.send("Project Heroku");
 });
 
 function verifyJWT(req, res, next) {
