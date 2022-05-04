@@ -32,6 +32,7 @@ function verifyJWT(req, res, next) {
   }
 
   const token = authHeader.split(" ")[1];
+  console.log(token);
   jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
     if (err) {
       return res.status(403).send({ message: "Forbidden Access" });
@@ -79,6 +80,29 @@ async function run() {
       } else {
         res.status(403).send({ message: "Access Forbidden" });
       }
+    });
+
+    //update product quantity after delivered
+    app.put("/product/quantityUpdate/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedProduct = req.body;
+      console.log(updatedProduct);
+      const filter = { _id: ObjectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          quantity: updatedProduct.currentQuantity,
+        },
+      };
+
+      const result = await productCollection.updateOne(
+        filter,
+        updateDoc,
+        options
+      );
+      result.quantity = updatedProduct.quantity;
+      res.send(result);
+      // res.send({ id });
     });
 
     //Products
