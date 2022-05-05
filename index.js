@@ -32,7 +32,7 @@ function verifyJWT(req, res, next) {
   }
 
   const token = authHeader.split(" ")[1];
-  console.log(token);
+  // console.log(token);
   jwt.verify(token, process.env.ACCESS_TOKEN, (err, decoded) => {
     if (err) {
       return res.status(403).send({ message: "Forbidden Access" });
@@ -62,7 +62,16 @@ async function run() {
       const query = {};
       const productCursor = productCollection.find(query);
       const product = await productCursor.toArray();
+      // console.log(product);
       res.send(product);
+    });
+
+    //delete a product
+    app.delete("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      res.send(result);
     });
 
     //find single Product
@@ -70,8 +79,6 @@ async function run() {
       const id = req.params.id;
       const email = req.query.email;
       const decodedEmail = req.decoded.email;
-      console.log("email", email);
-      console.log("decoded email", decodedEmail);
       if (email === decodedEmail) {
         const query = { _id: ObjectId(id) };
         const product = await productCollection.findOne(query);
@@ -82,7 +89,7 @@ async function run() {
       }
     });
 
-    //update product quantity after delivered
+    //update product quantity after delivered and restock
     app.put("/product/quantityUpdate/:id", async (req, res) => {
       const id = req.params.id;
       const updatedProduct = req.body;
