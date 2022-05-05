@@ -89,6 +89,21 @@ async function run() {
       }
     });
 
+    //find myitems
+
+    app.get("/myitems", verifyJWT, async (req, res) => {
+      const decodedEmail = req.decoded.email;
+      const email = req.query.email;
+      if (email === decodedEmail) {
+        const query = { email: email };
+        const cursor = productCollection.find(query);
+        const product = await cursor.toArray();
+        res.send(product);
+      } else {
+        res.status(403).send({ message: "forbidden access" });
+      }
+    });
+
     //update product quantity after delivered and restock
     app.put("/product/quantityUpdate/:id", async (req, res) => {
       const id = req.params.id;
