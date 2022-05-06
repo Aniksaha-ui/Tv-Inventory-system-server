@@ -73,6 +73,13 @@ async function run() {
       res.send(result);
     });
 
+    //find alerted quantity
+    app.get("/alertquantity", async (req, res) => {
+      const result = await productCollection.find({ quantity: { $lt: 10 } });
+      const alertedProduct = await result.toArray();
+      res.send(alertedProduct);
+    });
+
     //delete a product
     app.delete("/product/:id", async (req, res) => {
       const id = req.params.id;
